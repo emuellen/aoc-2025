@@ -22,7 +22,7 @@ pub fn part_two(input: &str) -> Option<u64> {
 
         if start <= 0 || start >= 100 {
             result += start.abs() / 100;
-            if last_zero || start > 0 {
+            if !last_zero && start <= 0 {
                 result += 1;
             }
             start %= 100;
