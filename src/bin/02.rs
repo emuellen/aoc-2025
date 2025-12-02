@@ -63,7 +63,7 @@ fn is_repeated_pattern(number: &str, check_all_duplicates: bool) -> bool {
 }
 
 fn parse(number: &str) -> u64 {
-    if number.starts_with("0") {
+    if number.len() == 0 || number.as_bytes()[0] == b'0' {
         return 0;
     }
     let mut num = 0;
