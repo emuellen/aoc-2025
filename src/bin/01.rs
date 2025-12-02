@@ -22,10 +22,10 @@ pub fn part_two(input: &str) -> Option<u64> {
 
         if start <= 0 || start >= 100 {
             result += start.abs() / 100;
-            if !last_zero && start <= 0 {
+            if last_zero || start > 0 {
                 result += 1;
             }
-            start = start % 100;
+            start %= 100;
             if start < 0 {
                 start += 100;
             }
@@ -55,20 +55,12 @@ impl<'a> Iterator for Parser<'a> {
             return None;
         }
         let slice = &self.buf[self.pos..];
-        let bytes = match slice.iter().position(|x| *x == b'\n') {
-            Some(i) => {
-                let line = &slice[..i];
-                self.pos += i + 1; // skip '\n'
-                line
-            }
-            None => {
-                // no more newlines → return the rest as the last line
-                let line = slice;
-                self.pos = self.buf.len();
-                line
-            }
-        };
-        Some(parse_line(bytes))
+        let i = slice
+            .iter()
+            .position(|&c| c == b'\n')
+            .unwrap_or(slice.len());
+        self.pos += i + 1;
+        Some(parse_line(&slice[..i]))
     }
 }
 
