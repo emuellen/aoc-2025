@@ -65,10 +65,15 @@ impl<'a> Iterator for Parser<'a> {
 }
 
 fn parse_line(bytes: &[u8]) -> i32 {
+    if bytes.len() < 2 {
+        return 0;
+    }
     let sign = ((bytes[0] & 2) as i32) - 1;
     let mut num = 0;
     for b in &bytes[1..] {
-        num = num * 10 + (b - b'0') as i32;
+        if b.is_ascii_digit() {
+            num = num * 10 + (b - b'0') as i32;
+        }
     }
     sign * num
 }
